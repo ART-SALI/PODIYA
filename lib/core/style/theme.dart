@@ -27,7 +27,7 @@ final darkTheme = ThemeData(
       onPrimary: Color(0xffffffff),
 
       primaryContainer: Color(0xccD9D9D9),
-      onPrimaryContainer: Color(0xff535353),
+      onPrimaryContainer: Color(0xffadadad),
 
       secondary: Color(0xff3E3E3E),
       secondaryContainer: Color(0x993E3E3E),

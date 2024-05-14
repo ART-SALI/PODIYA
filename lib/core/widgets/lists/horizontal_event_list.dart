@@ -1,10 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pod_i_ya/core/style/text_styles.dart';
-import 'package:pod_i_ya/core/widgets/EventCard/event_card.dart';
+import 'package:pod_i_ya/core/widgets/event_card/event_card.dart';
 import 'package:pod_i_ya/features/main_app/data/model/event_model.dart';
-import 'package:pod_i_ya/features/main_app/presentation/cubit/user_cubit.dart';
 
 class HorizontalEventList extends StatefulWidget {
   final List<EventModel>? events;
@@ -38,22 +34,11 @@ class _HorizontalEventListState extends State<HorizontalEventList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 320.0,
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      height: 200.0,
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('fff'),
-                TextButton(onPressed: () {}, child: const Text('dfgd')),
-              ],
-            ),
-          ),
           SizedBox(
-            height: 200.0,
+            height: 183.0,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[

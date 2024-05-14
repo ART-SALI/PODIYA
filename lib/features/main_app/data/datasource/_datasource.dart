@@ -15,15 +15,31 @@ class DatasourceImpl implements Datasource {
 
   Future<bool> getAllEvents() async {
 
-
-
     Uri api = Uri.parse('http://51.44.28.183:8000/api/events');
 
     http.Response response = await http.get(api);
 
     if (response.statusCode == 200) {
-      print(json.decode(response.body));
+      // print(json.decode(response.body));
       currentPage = response.body;
+      return true;
+    }
+    else {
+      print(response.reasonPhrase);
+      return false;
+    }
+
+  }
+
+  Future<bool> getAllEventsByPage(int page) async {
+
+    Uri api = Uri.parse('http://51.44.28.183:8000/api/events/?page_size=5/?page=$page');
+
+    http.Response response = await http.get(api);
+
+    if (response.statusCode == 200) {
+      print(json.decode(response.body));
+      // currentPage = response.body;
       return true;
     }
     else {
@@ -46,10 +62,10 @@ class DatasourceImpl implements Datasource {
 
 
     if (response.statusCode == 200) {
-      print(json.decode(response.body));
+      // print(json.decode(response.body));
       currentPage = json.decode(utf8.decode(response.bodyBytes)) as Map;
       events=(currentPage["results"] as List).map((i) => EventModel.fromJson(i)).toList();
-      print(events.toString());
+      // print(events.toString());
       return true;
     }
     else {
@@ -62,7 +78,6 @@ class DatasourceImpl implements Datasource {
   Future<bool> getEvents() async {
 
     var headers = {
-      'Content-Type': 'application/json; charset=utf-16',
       'Accept': 'application/json',
     };
 
@@ -75,7 +90,7 @@ class DatasourceImpl implements Datasource {
       print(json.decode(response.body));
       currentPage = json.decode(utf8.decode(response.bodyBytes)) as Map;
       events=(currentPage["results"] as List).map((i) => EventModel.fromJson(i)).toList();
-      print(events.toString());
+      // print(events.toString());
       return true;
     }
     else {
@@ -84,4 +99,5 @@ class DatasourceImpl implements Datasource {
     }
 
   }
+
 }

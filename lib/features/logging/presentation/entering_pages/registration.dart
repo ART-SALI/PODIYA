@@ -59,7 +59,9 @@ class _RegistrationPageState extends State<RegistrationPage>{
           const Spacer(
             flex: 3,
           ),
-          RegistrationEnterButton(userNameController: _userNameController, passwordController: _passwordController, emailController: _emailController),
+          RegistrationEnterButton(userNameController: _userNameController,
+              passwordController: _passwordController,
+              emailController: _emailController),
           const Spacer(
             flex: 4,
           ),
