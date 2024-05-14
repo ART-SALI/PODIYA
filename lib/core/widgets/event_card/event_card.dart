@@ -21,7 +21,8 @@ class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12),
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      height: 183,
       width: 335,
       decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -123,7 +124,7 @@ class _EventCardState extends State<EventCard> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "??? ${widget.eventModel.price!.toStringAsFixed(2)}?",
+                            "Від ${widget.eventModel.price!.toStringAsFixed(2)}₴",
                             style: const Font().copyWith(
                               color: const Color(0xffffffff),
                             ),

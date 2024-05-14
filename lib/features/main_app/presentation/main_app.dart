@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pod_i_ya/core/util/pixel_sizer.dart';
+import 'package:pod_i_ya/main/cubit/theme_cubit.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:pod_i_ya/core/widgets/app_bars/base_app_bar.dart';
 import 'package:pod_i_ya/features/main_page/presentation/main_page/main_page.dart';
@@ -119,7 +121,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
         onPressed: () => Scaffold.of(context).openDrawer(),
         tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
       );
-    }));
+    }), backgroundColor: Theme.of(context).colorScheme.background,);
   }
 
   @override
@@ -135,7 +137,20 @@ class MainAppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
+        padding: EdgeInsets.symmetric(vertical: 36, horizontal: 12),
         color: Colors.grey,
+        child: BlocBuilder<ThemeCubit, bool>(
+          builder: (context, value) {
+            return SwitchListTile(
+              activeColor: Theme.of(context).colorScheme.background,
+              value: value,
+              onChanged: (value) {
+                BlocProvider.of<ThemeCubit>(context)
+                    .toggleTheme(value: value);
+              },
+            );
+          },
+        ),
       ),
     );
   }

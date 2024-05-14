@@ -13,7 +13,7 @@ class PasswordTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EnteringTextField(
-      textColor: Theme.of(context).colorScheme.onPrimaryContainer,
+      textColor: Theme.of(context).colorScheme.onBackground,
       fillColor: Theme.of(context).colorScheme.primaryContainer,
       controller: _passwordController,
       hintText: "Password".tr(),
