@@ -9,6 +9,8 @@ class CityDatasourceImpl extends Datasource{
 
   String? city;
 
+  List<String>? cities;
+
   CityDatasourceImpl();
 
  Future<bool> getCity(int cityNum) async {
@@ -17,6 +19,7 @@ class CityDatasourceImpl extends Datasource{
       'Accept': 'application/json',
     };
 
+
     Uri api = Uri.parse('http://51.44.28.183:8000/api/events/cities/$cityNum/');
 
     http.Response response = await http.get(api, headers: headers);
@@ -24,6 +27,34 @@ class CityDatasourceImpl extends Datasource{
     if (response.statusCode == 200) {
       var data = json.decode(utf8.decode(response.bodyBytes)) as Map;
       city = data["name"];
+      print(city);
+      return true;
+    }
+    else {
+      print(response.reasonPhrase);
+      city = "Бориспіль";
+      print(city);
+      return false;
+    }
+
+
+  }
+
+  Future<bool> getAllCity() async {
+    var headers = {
+      'Content-Type': 'application/json; charset=utf-16',
+      'Accept': 'application/json',
+    };
+
+
+    Uri api = Uri.parse('http://51.44.28.183:8000/api/events/cities/?page_size=458');
+
+    http.Response response = await http.get(api, headers: headers);
+
+    if (response.statusCode == 200) {
+      var data = json.decode(utf8.decode(response.bodyBytes)) as Map;
+      cities = (data["results"] as List).map((i) => i["name"] as String).toList();
+      print(cities);
       return true;
     }
     else {

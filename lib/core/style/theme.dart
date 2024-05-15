@@ -20,7 +20,7 @@ class CTheme {
 final darkTheme = ThemeData(
   fontFamily: 'Montserrat',
   colorScheme: const ColorScheme.dark(
-      background: Color(0xcc434343),
+      background: Color(0xff2A2C38),
       onBackground: Color(0xffFFFFFF),
 
       primary: Color(0xff654BB3),

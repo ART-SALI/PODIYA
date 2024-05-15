@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pod_i_ya/core/style/text_styles.dart';
-import 'package:pod_i_ya/core/widgets/event_card/event_card.dart';
 import 'package:pod_i_ya/core/widgets/app_bars/base_app_bar.dart';
 import 'package:pod_i_ya/features/event_catalog/data/datasource/catalog_datasource.dart';
 import 'package:pod_i_ya/features/event_catalog/presentation/components/catalog.dart';
@@ -38,7 +37,16 @@ class _CatalogPageState extends State<CatalogPage> {
   int page = 1;
   int maxPages = 1;
 
-  Widget catalog = CircularProgressIndicator();
+  Map<String, dynamic>filter = {
+    "tags" : [],
+    "fromDate" : null,
+    "toDate" : null,
+    "loverPrice" : -1,
+    "upperPrice" : -1,
+    "city": null,
+  };
+
+  Widget catalog = const CircularProgressIndicator();
 
   @override
   void initState() {
@@ -48,7 +56,7 @@ class _CatalogPageState extends State<CatalogPage> {
 
   Future<void> getData() async {
     var data = CatalogDatasourceImpl();
-    if (await data.getEventsByPage(page)) {
+    if (await data.getEventsByPageAndFilter(page, filter)) {
       events = data.events!;
       setState(() {
         events;
@@ -57,7 +65,7 @@ class _CatalogPageState extends State<CatalogPage> {
     maxPages = data.numPages!;
     var newData = CityDatasourceImpl();
     await newData.getCity(3);
-    for (int i = 0; i < cities.length; i++) {
+    for (int i = 0; i < events!.length; i++) {
       if (await newData.getCity(events![i].city!)) {
         cities[i] = newData.city!;
         setState(() {
@@ -68,59 +76,73 @@ class _CatalogPageState extends State<CatalogPage> {
     }
   }
 
-  String leftButton(){
-    if(page == 1){
+  String leftButton() {
+    if (page == 1) {
       return page.toString();
-    }else {
+    } else {
       return (page - 1).toString();
     }
   }
 
-  String rightButton(){
-    if(page == 1){
+  String rightButton() {
+    if (page == 1) {
       return "3";
     }
-    if(page == maxPages){
+    if (page == maxPages) {
       return page.toString();
-    }else {
+    } else {
       return (page + 1).toString();
     }
   }
 
-  String centralButton(){
-    if(page == 1){
+  String centralButton() {
+    if (page == 1) {
       return "2";
     }
-    if(page == maxPages){
+    if (page == maxPages) {
       return (page - 1).toString();
-    }else {
+    } else {
       return page.toString();
     }
   }
 
-  Color pageButtonColor(int? num, {bool central = false}){
-    if(central){
-      if(page == 1 || page == maxPages){
-        return Color(0x80967595);
+  Color pageButtonColor(int? num, {bool central = false}) {
+    if (central) {
+      if (page == 1 || page == maxPages) {
+        return const Color(0x80967595);
       }
-      return Color(0xff967595);
+      return const Color(0xff967595);
     }
-    if(page == num){
-      return Color(0xff967595);
+    if (page == num) {
+      return const Color(0xff967595);
     }
-    return Color(0x80967595);
+    return const Color(0x80967595);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(
-        leftWidget:
-            IconButton(icon: Icon(Icons.arrow_back), onPressed: (){Navigator.of(context).pop();},),
-      centerWidget: Text("Catalog".tr()),
-      rightWidget:
-          IconButton(onPressed: (){Navigator.of(context).push(MaterialPageRoute(builder: (context) => FiltersPage()));}, icon: Icon(Icons.filter_alt_rounded),),
-      backgroundColor: Theme.of(context).colorScheme.background,),
+        leftWidget: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        centerWidget: Text("Catalog".tr()),
+        rightWidget: IconButton(
+          onPressed: () async {
+           filter = await Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => const FiltersPage())) as Map<String, dynamic>;
+           print(filter.toString());
+           setState(() {
+             getData();
+           });
+          },
+          icon: const Icon(Icons.filter_alt_rounded),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.background,
+      ),
       body: ListView(
         children: [
           catalog,
@@ -136,12 +158,13 @@ class _CatalogPageState extends State<CatalogPage> {
                       getData();
                     }
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_left_outlined,
                     color: Color(0xff000000),
                   ),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Color(0x80967595)),
+                    backgroundColor:
+                        MaterialStateProperty.all(const Color(0x80967595)),
                   ),
                 ),
                 IconButton(
@@ -151,16 +174,36 @@ class _CatalogPageState extends State<CatalogPage> {
                       getData();
                     }
                   },
-                  icon: Text(leftButton(), style: Font().copyWith(color: Color(0xff000000),),),
+                  icon: Text(
+                    leftButton(),
+                    style: const Font().copyWith(
+                      color: const Color(0xff000000),
+                    ),
+                  ),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(pageButtonColor(1)),
+                    backgroundColor:
+                        MaterialStateProperty.all(pageButtonColor(1)),
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
-                  icon: Text(centralButton(), style: Font().copyWith(color: Color(0xff000000),),),
+                  onPressed: () {
+                    if (page == 1 && maxPages > 1) {
+                      page++;
+                      getData();
+                    } else if (page == maxPages && maxPages > 2) {
+                      page--;
+                      getData();
+                    }
+                  },
+                  icon: Text(
+                    centralButton(),
+                    style: const Font().copyWith(
+                      color: const Color(0xff000000),
+                    ),
+                  ),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(pageButtonColor(null, central: true)),
+                    backgroundColor: MaterialStateProperty.all(
+                        pageButtonColor(null, central: true)),
                   ),
                 ),
                 IconButton(
@@ -170,9 +213,15 @@ class _CatalogPageState extends State<CatalogPage> {
                       getData();
                     }
                   },
-                  icon: Text(rightButton(), style: Font().copyWith(color: Color(0xff000000),),),
+                  icon: Text(
+                    rightButton(),
+                    style: const Font().copyWith(
+                      color: const Color(0xff000000),
+                    ),
+                  ),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(pageButtonColor(maxPages)),
+                    backgroundColor:
+                        MaterialStateProperty.all(pageButtonColor(maxPages)),
                   ),
                 ),
                 IconButton(
@@ -182,12 +231,13 @@ class _CatalogPageState extends State<CatalogPage> {
                       getData();
                     }
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_right_outlined,
                     color: Color(0xff000000),
                   ),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Color(0x80967595)),
+                    backgroundColor:
+                        MaterialStateProperty.all(const Color(0x80967595)),
                   ),
                 ),
               ],
@@ -198,5 +248,3 @@ class _CatalogPageState extends State<CatalogPage> {
     );
   }
 }
-
-

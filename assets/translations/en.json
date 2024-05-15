@@ -21,5 +21,11 @@
   "Catalog": "Catalog",
   "Filters": "Filters",
   "Date": "Date",
-  "Choose the date":"Choose the date"
+  "Choose date":"Choose date",
+  "From": "From",
+  "to": "to",
+  "City": "City",
+  "Price": "Price",
+  "Approve": "Approve",
+  "Tags": "Tags"
 }

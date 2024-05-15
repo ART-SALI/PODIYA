@@ -23,7 +23,7 @@ class EventModel extends Event {
     description = json['description'];
     price = double.parse(json['price'].toString());
     image = json['image'];
-    location = json['location'];
+    location = json['location_info'];
     time = DateTime.parse(json['time'].toString());
     created_at = DateTime.parse(json['created_at'].toString());
     city = json['city'];

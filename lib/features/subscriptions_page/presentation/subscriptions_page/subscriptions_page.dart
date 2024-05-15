@@ -53,7 +53,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     maxPages = data.numPages!;
     var newData = CityDatasourceImpl();
     await newData.getCity(3);
-    for (int i = 0; i < cities.length; i++) {
+    for (int i = 0; i < events!.length; i++) {
       if (await newData.getCity(events![i].city!)) {
         cities[i] = newData.city!;
         setState(() {
@@ -133,21 +133,35 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {if (page > 1) {
+                  page--;
+                  getData();
+                }},
                 icon: Text(leftButton(), style: const Font().copyWith(color: const Color(0xff000000),),),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(pageButtonColor(1)),
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  if (page == 1 && maxPages > 1) {
+                    page++;
+                    getData();
+                  } else if(page == maxPages && maxPages > 2) {
+                    page--;
+                    getData();
+                  }
+                },
                 icon: Text(centralButton(), style: const Font().copyWith(color: const Color(0xff000000),),),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(pageButtonColor(null, central: true)),
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {if (page < maxPages) {
+                  page += 1;
+                  getData();
+                }},
                 icon: Text(rightButton(), style: const Font().copyWith(color: const Color(0xff000000),),),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(pageButtonColor(maxPages)),

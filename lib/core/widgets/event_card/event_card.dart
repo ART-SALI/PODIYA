@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pod_i_ya/core/style/text_styles.dart';
+import 'package:pod_i_ya/features/event_page/presentation/event_page.dart';
 import 'package:pod_i_ya/features/main_app/data/model/event_model.dart';
 
 class EventCard extends StatefulWidget {
@@ -88,7 +90,7 @@ class _EventCardState extends State<EventCard> {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  width: 220,
+                  width: 195,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,21 +118,36 @@ class _EventCardState extends State<EventCard> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: 115,
+                Container(
+                  padding: EdgeInsets.all(8),
+                  width: 140,
                   child: TextButton(
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Від ${widget.eventModel.price!.toStringAsFixed(2)}₴",
-                            style: const Font().copyWith(
-                              color: const Color(0xffffffff),
-                            ),
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Color(0xff676767)),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => EventPage(
+                            eventModel: widget.eventModel,
+                            city: widget.city,
                           ),
-                        ],
-                      )),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Від ${widget.eventModel.price!.toStringAsFixed(2)}₴",
+                          style: const Font().copyWith(
+                            color: const Color(0xffffffff),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 )
               ],
             ),

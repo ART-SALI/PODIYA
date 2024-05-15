@@ -18,6 +18,8 @@ class DatasourceImpl implements Datasource {
 
   Future<bool> postUserLogin( Map<String, dynamic> user ) async {
 
+    Map<String, dynamic> refresh = {};
+
     Uri api = Uri.parse('http://51.44.28.183:8000/api/users/login/');
 
     http.Response response = await http.post(api,
@@ -26,6 +28,31 @@ class DatasourceImpl implements Datasource {
 
     if (response.statusCode == 200) {
       print(json.decode(response.body));
+      userModel = UserModel.fromJson(json.decode(response.body));
+      token = userModel!.token;
+      refresh["refresh"] = userModel!.refresh;
+      postRefresh(refresh);
+      return true;
+    }
+    else {
+      print(response.reasonPhrase);
+      return false;
+    }
+
+
+  }
+
+  Future<bool> postRefresh( Map<String, dynamic> refresh ) async {
+
+    Uri api = Uri.parse('http://51.44.28.183:8000/api/users/token-refresh/');
+
+    http.Response response = await http.post(api,
+        body: refresh
+    );
+
+    if (response.statusCode == 200) {
+      print(json.decode(response.body));
+      print("----------------Refresh");
       userModel = UserModel.fromJson(json.decode(response.body));
       token = userModel!.token;
       return true;

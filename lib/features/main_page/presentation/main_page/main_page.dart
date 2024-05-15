@@ -82,7 +82,8 @@ class _MainPageState extends State<MainPage> {
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onBackground),
-                              )),
+                              ),
+                          ),
                         ],
                       ),
                     ),
@@ -119,7 +120,7 @@ class _MainPageState extends State<MainPage> {
                       events: events,
                       cities: cities,
                     ),
-                    TagList(),
+                    // TagList(),
                   ],
                 )
               ],
